@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: ridehail-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ridehail_user
+      POSTGRES_PASSWORD: ridehail_pass
+      POSTGRES_DB: ridehail_db
+    volumes:
+      - ridehail_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ridehail-rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+
+volumes:
+  ridehail_pgdata:

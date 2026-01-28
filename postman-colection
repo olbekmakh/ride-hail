@@ -1,0 +1,306 @@
+{
+  "info": {
+    "_postman_id": "7b5f19d2-3a3a-4e2a-9d8b-9cc2c3e6d1aa",
+    "name": "ride-hail-system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for Ride Service + Driver & Location Service + Admin Service (REST). Uses env variables for base URLs and JWT tokens."
+  },
+  "variable": [
+    { "key": "rideBaseUrl", "value": "http://localhost:3000" },
+    { "key": "driverBaseUrl", "value": "http://localhost:3001" },
+    { "key": "adminBaseUrl", "value": "http://localhost:3004" },
+
+    { "key": "passengerId", "value": "550e8400-e29b-41d4-a716-446655440001" },
+    { "key": "driverId", "value": "660e8400-e29b-41d4-a716-446655440001" },
+    { "key": "adminId", "value": "770e8400-e29b-41d4-a716-446655440001" },
+
+    { "key": "passengerToken", "value": "PASTE_PASSENGER_JWT_HERE" },
+    { "key": "driverToken", "value": "PASTE_DRIVER_JWT_HERE" },
+    { "key": "adminToken", "value": "PASTE_ADMIN_JWT_HERE" },
+
+    { "key": "rideId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Ride Service - /health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{rideBaseUrl}}/health",
+              "host": ["{{rideBaseUrl}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Driver Service - /health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{driverBaseUrl}}/health",
+              "host": ["{{driverBaseUrl}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Admin Service - /health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{adminBaseUrl}}/health",
+              "host": ["{{adminBaseUrl}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Driver & Location Service",
+      "item": [
+        {
+          "name": "Driver Online",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 43.238949,\n  \"longitude\": 76.889709\n}\n"
+            },
+            "url": {
+              "raw": "{{driverBaseUrl}}/drivers/{{driverId}}/online",
+              "host": ["{{driverBaseUrl}}"],
+              "path": ["drivers", "{{driverId}}", "online"]
+            }
+          }
+        },
+        {
+          "name": "Driver Offline",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+            ],
+            "url": {
+              "raw": "{{driverBaseUrl}}/drivers/{{driverId}}/offline",
+              "host": ["{{driverBaseUrl}}"],
+              "path": ["drivers", "{{driverId}}", "offline"]
+            }
+          }
+        },
+        {
+          "name": "Update Driver Location",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ride_id\": \"{{rideId}}\",\n  \"latitude\": 43.236000,\n  \"longitude\": 76.886000,\n  \"accuracy_meters\": 5.0,\n  \"speed_kmh\": 45.0,\n  \"heading_degrees\": 180.0\n}\n"
+            },
+            "url": {
+              "raw": "{{driverBaseUrl}}/drivers/{{driverId}}/location",
+              "host": ["{{driverBaseUrl}}"],
+              "path": ["drivers", "{{driverId}}", "location"]
+            }
+          }
+        },
+        {
+          "name": "Driver Arrived",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ride_id\": \"{{rideId}}\"\n}\n"
+            },
+            "url": {
+              "raw": "{{driverBaseUrl}}/drivers/{{driverId}}/arrived",
+              "host": ["{{driverBaseUrl}}"],
+              "path": ["drivers", "{{driverId}}", "arrived"]
+            }
+          }
+        },
+        {
+          "name": "Start Ride",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ride_id\": \"{{rideId}}\"\n}\n"
+            },
+            "url": {
+              "raw": "{{driverBaseUrl}}/drivers/{{driverId}}/start",
+              "host": ["{{driverBaseUrl}}"],
+              "path": ["drivers", "{{driverId}}", "start"]
+            }
+          }
+        },
+        {
+          "name": "Complete Ride",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ride_id\": \"{{rideId}}\",\n  \"actual_distance_km\": 5.5,\n  \"actual_duration_minutes\": 16\n}\n"
+            },
+            "url": {
+              "raw": "{{driverBaseUrl}}/drivers/{{driverId}}/complete",
+              "host": ["{{driverBaseUrl}}"],
+              "path": ["drivers", "{{driverId}}", "complete"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ride Service",
+      "item": [
+        {
+          "name": "Create Ride (sets rideId)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "try {",
+                  "  const json = pm.response.json();",
+                  "  if (json && json.ride_id) {",
+                  "    pm.collectionVariables.set('rideId', json.ride_id);",
+                  "  }",
+                  "} catch (e) {}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"passenger_id\": \"{{passengerId}}\",\n  \"pickup_latitude\": 43.238949,\n  \"pickup_longitude\": 76.889709,\n  \"pickup_address\": \"Almaty Central Park\",\n  \"destination_latitude\": 43.222015,\n  \"destination_longitude\": 76.851511,\n  \"destination_address\": \"Kok-Tobe Hill\",\n  \"ride_type\": \"ECONOMY\"\n}\n"
+            },
+            "url": {
+              "raw": "{{rideBaseUrl}}/rides",
+              "host": ["{{rideBaseUrl}}"],
+              "path": ["rides"]
+            }
+          }
+        },
+        {
+          "name": "Cancel Ride",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Changed my mind\"\n}\n"
+            },
+            "url": {
+              "raw": "{{rideBaseUrl}}/rides/{{rideId}}/cancel",
+              "host": ["{{rideBaseUrl}}"],
+              "path": ["rides", "{{rideId}}", "cancel"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Service",
+      "item": [
+        {
+          "name": "Admin Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{adminBaseUrl}}/admin/overview",
+              "host": ["{{adminBaseUrl}}"],
+              "path": ["admin", "overview"]
+            }
+          }
+        },
+        {
+          "name": "Active Rides",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": {
+              "raw": "{{adminBaseUrl}}/admin/rides/active",
+              "host": ["{{adminBaseUrl}}"],
+              "path": ["admin", "rides", "active"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "WebSocket (manual notes)",
+      "item": [
+        {
+          "name": "Passenger WS URL (manual)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "ws://localhost:3000/ws/passengers/{{passengerId}}",
+              "protocol": "ws",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["ws", "passengers", "{{passengerId}}"]
+            },
+            "description": "Connect to ws://localhost:3000/ws/passengers/{{passengerId}} then immediately send:\n{\n  \"type\": \"auth\",\n  \"token\": \"Bearer {{passengerToken}}\"\n}\n\nYou should receive ride_status_update and driver_location_update events."
+          }
+        },
+        {
+          "name": "Driver WS URL (manual)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "ws://localhost:3001/ws/drivers/{{driverId}}",
+              "protocol": "ws",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["ws", "drivers", "{{driverId}}"]
+            },
+            "description": "Connect to ws://localhost:3001/ws/drivers/{{driverId}} then immediately send:\n{\n  \"type\": \"auth\",\n  \"token\": \"Bearer {{driverToken}}\"\n}\n\nTo accept an offer, send:\n{\n  \"type\": \"ride_response\",\n  \"offer_id\": \"offer_<...>\",\n  \"ride_id\": \"{{rideId}}\",\n  \"accepted\": true\n}"
+          }
+        }
+      ]
+    }
+  ]
+}
